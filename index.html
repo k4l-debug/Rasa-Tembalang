@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rasa Tembalang</title>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CHART JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- ICON -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- EXTERNAL CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body class="antialiased">
+    <!-- LOADING -->
+    <div id="loading"><div class="loader">RASA</div></div>
+
+    <!-- NAV -->
+    <header class="nav">
+      <div class="container flex items-center justify-between py-4">
+        <div class="brand">
+          <div class="logo">🍽</div>
+          <div>
+            <div class="text-lg font-bold">Rasa Tembalang</div>
+            <div class="text-xs opacity-70">Pilihan kuliner & rekomendasi</div>
+          </div>
+        </div>
+
+        <nav class="hidden md:flex items-center gap-4">
+          <button class="nav-btn" data-target="home">Beranda</button>
+          <button class="nav-btn" data-target="rekom">Tempat Makan</button>
+          
+          <button class="nav-btn" data-target="dashboard">Tentang</button>
+          
+        </nav>
+
+        <div class="md:hidden">
+          <button id="openMobile" class="btn btn-ghost">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="pt-28">
+      <!-- HERO SECTION -->
+      <section id="home" class="section container mx-auto fade-in">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h1 class="text-4xl font-extrabold leading-tight mb-4">
+              Selami Rasa Tembalang — Temukan Spot Makan Favoritmu
+            </h1>
+            <p class="text-lg opacity-80 mb-6">
+              Desain premium, foto nyata, rekomendasi praktis untuk mahasiswa &
+              warga Tembalang.
+            </p>
+            <div class="flex gap-3">
+            </div>
+          </div>
+          <div class="hero-card card">
+            <img
+              src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
+              alt="hero food"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- REKOMENDASI -->
+      <section id="rekom" class="section container mx-auto py-10 slide-up">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold">Rekomendasi Top</h2>
+          <div class="flex gap-3 items-center" style="min-width: 320px">
+            <input
+              id="search"
+              class="search"
+              placeholder="Cari restoran atau menu..."
+            />
+            <select id="filterType" class="search" style="width: 160px">
+              <option value="all">Semua</option>
+              <option value="berat">Makanan Berat</option>
+              <option value="mahasiswa">Rekomendasi Mahasiswa</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="cards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </section>
+
+      <!-- MENU FAVORIT -->
+      <section id="menu" class="section container mx-auto py-10 slide-up" style="display: none;">
+        <h2 class="text-2xl font-bold mb-4">Menu Favorit Mahasiswa</h2>
+        <div
+          id="favorites"
+          class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        ></div>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="section container mx-auto py-10 fade-in">
+        <h2 class="text-2xl font-bold mb-4">Dashboard — Rating & Penjualan</h2>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="glass p-6 rounded-2xl shadow">
+            <label class="font-semibold">Pilih Restoran</label>
+            <select
+              id="restoSelect"
+              class="w-full mt-3 p-2 rounded-lg"
+            ></select>
+            <canvas id="barChart" class="mt-6"></canvas>
+          </div>
+
+          <div class="glass p-6 rounded-2xl shadow">
+            <h4 class="font-semibold">Proporsi Kepuasan</h4>
+            <canvas id="pieChart" class="mt-4"></canvas>
+            <div id="insight" class="mt-4 text-sm opacity-80">
+              Insight singkat...
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="section container mx-auto py-10 fade-in">
+        <h2 class="text-2xl font-bold mb-4">Tentang Rasa Kota</h2>
+        <p class="text-lg opacity-80 max-w-3xl">
+          Platform ini membantu pencarian kuliner di Tembalang: foto asli,
+          rekomendasi mahasiswa, dan data ringkas untuk memudahkan keputusan
+          makanmu.
+        </p>
+      </section>
+
+      <!-- DETAIL SECTION -->
+      <section id="detailSection" class="detail-wrap hidden-section">
+        <div class="container">
+          <div class="detail-card">
+            <div>
+              <img
+                id="detail_main_img"
+                src=""
+                alt="detail"
+                class="detail-img"
+              />
+            </div>
+
+            <aside class="info-panel">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h2 id="detail_name" class="text-3xl font-bold mb-2"></h2>
+                  <div class="mb-3">
+                    <span
+                      id="detail_price"
+                      class="text-lg font-semibold"
+                    ></span>
+                    <span class="ml-3 opacity-70" id="detail_hours"></span>
+                  </div>
+
+                  <div class="rating-badge mb-4">
+                    <i class="fa-solid fa-star" style="color: #8b5cf6"></i>
+                    <span id="detail_rating" class="text-sm"></span>
+                  </div>
+                </div>
+              </div>
+
+              <p id="detail_desc" class="opacity-80 mb-4"></p>
+
+              <p class="mb-3">
+                <strong>Alamat:</strong> <span id="detail_address"></span>
+              </p>
+
+              <div class="flex gap-3 mb-4">
+                <a id="detail_maps_btn" class="btn-primary btn" target="_blank">
+                  <i class="fa-solid fa-map-pin mr-2"></i> Buka di Google Maps
+                </a>
+                <button id="detail_back_btn" class="btn btn-outline">
+                  Kembali
+                </button>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-3">Rekomendasi Serupa</h4>
+                <div id="detail_similar" class="grid grid-cols-1 gap-3"></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-12 py-8">
+      <div class="container text-center text-sm opacity-80">
+        © 2025 Rasa Kota Tembalang — dibuat dengan ❤️
+      </div>
+    </footer>
+
+    <!-- EXTERNAL JS -->
+    <script src="js/app.js"></script>
+  </body>
+</html>
